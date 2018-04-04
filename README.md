@@ -12,10 +12,9 @@ memcached
 
 ```
 npm install
-```
-```
 node index.js arg1 arg2 arg3
 ```
+### Sample Example
 ```
 node index.js "Brklyn Center - Fremont - 26th" "Brooklyn Center Transit" NORTHBOUND
 ```
