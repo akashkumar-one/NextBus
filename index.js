@@ -1,6 +1,6 @@
 const request = require("request"),
     NodeCache = require("node-cache"),
-    rqCache = new NodeCache({ stdTTL: 10000, checkperiod: 120 });
+    rqCache = new NodeCache();
 
 let options = {
     method: 'GET',
@@ -9,7 +9,7 @@ let options = {
         { 'Accept': 'application/json' }
 };
 
-function rq(options, key) {
+function rq(options, key, ttl) {
     return new Promise((resolve, reject) => {
         let value = rqCache.get(key);
         // console.log(value ? value.length : undefined);
@@ -19,7 +19,7 @@ function rq(options, key) {
                     reject(err);
                 if (data) {
                     data = JSON.parse(data);
-                    rqCache.set("Routes", data);
+                    rqCache.set(key, data, ttl);
                     resolve(data);
                 }
             })
@@ -46,7 +46,7 @@ if (cmdArg.length !== 3) {
         }).then((data) => {
             if (data) {
                 options.url = "http://svc.metrotransit.org/NexTrip/Directions/" + data;
-                return rq(options, "Routes" + data)
+                return rq(options, "Routes" + data, 86400)
             } else {
                 return Promise.reject("Route not Found")
             }
@@ -60,7 +60,7 @@ if (cmdArg.length !== 3) {
         }).then((data) => {
             if (data) {
                 options.url = "http://svc.metrotransit.org/NexTrip/Stops/" + routeCode + "/" + data;
-                return rq(options, "Routes" + routeCode + data)
+                return rq(options, "Routes" + routeCode + "/" + data, 86400)
             } else {
                 return Promise.reject("Direction not Found")
             }
@@ -74,7 +74,7 @@ if (cmdArg.length !== 3) {
         }).then((data) => {
             if (data) {
                 options.url = "http://svc.metrotransit.org/NexTrip/" + routeCode + "/" + directionCode + "/" + data;
-                return rq(options, "Routes" + routeCode + directionCode + data)
+                return rq(options, "Routes" + routeCode + "/" + directionCode + "/" + data, 30)
             } else {
                 return Promise.reject("Transit not available")
             }
@@ -84,3 +84,7 @@ if (cmdArg.length !== 3) {
             console.error(err);
         })
 }
+
+setInterval(function(){
+console.log(rqCache.get("Routes5/4/BCTC"))
+},10000)
