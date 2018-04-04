@@ -17,6 +17,7 @@ node index.js arg1 arg2 arg3
 ### Example
 ```
 node index.js "Brklyn Center - Fremont - 26th" "Brooklyn Center Transit" NORTHBOUND
+> 18 Min
 ```
 
 ## Authors
