@@ -1,0 +1,16 @@
+{
+  "name": "api_consumption",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "akash",
+  "license": "MIT",
+  "dependencies": {
+    "node-cache": "^4.2.0",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
+  }
+}
