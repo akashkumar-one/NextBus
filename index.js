@@ -1,6 +1,6 @@
 const request = require("request"),
-    NodeCache = require("node-cache"),
-    rqCache = new NodeCache();
+    Memcached = require("memcached"),
+    rqCache = new Memcached();
 
 let options = {
     method: 'GET',
@@ -11,21 +11,23 @@ let options = {
 
 function rq(options, key, ttl) {
     return new Promise((resolve, reject) => {
-        let value = rqCache.get(key);
-        // console.log(value ? value.length : undefined);
-        if (!value) {
-            request(options, function (err, response, data) {
-                if (err)
-                    reject(err);
-                if (data) {
-                    data = JSON.parse(data);
-                    rqCache.set(key, data, ttl);
-                    resolve(data);
-                }
-            })
-        } else {
-            resolve(value)
-        }
+        rqCache.get(key, function (err, value) {
+            if (!value) {
+                request(options, function (err, response, data) {
+                    if (err)
+                        reject(err);
+                    if (data) {
+                        data = JSON.parse(data);
+                        rqCache.set(key, data, ttl, function (err) {
+                            if (err) reject(err);
+                            resolve(data);
+                        });
+                    }
+                })
+            } else {
+                resolve(value)
+            }
+        })
     })
 }
 
@@ -35,7 +37,7 @@ if (cmdArg.length !== 3) {
     console.log("Invalid input");
 } else {
     let routeCode, directionCode, stopCode;
-    rq(options, "Routes")
+    rq(options, "Routes", 86400)
         .then((data) => {
             data.forEach(ele => {
                 if (((ele.Description).toLowerCase()).includes(cmdArg[0].toLowerCase())) {
@@ -84,7 +86,3 @@ if (cmdArg.length !== 3) {
             console.error(err);
         })
 }
-
-setInterval(function(){
-console.log(rqCache.get("Routes5/4/BCTC"))
-},10000)
