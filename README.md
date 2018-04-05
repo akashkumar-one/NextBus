@@ -12,7 +12,7 @@ memcached
 
 ```
 npm install
-node index.js arg1 arg2 arg3
+node index.js "BUS ROUTE" "BUS STOP NAME" "DIRECTION"
 ```
 ### Example
 ```
