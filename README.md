@@ -12,14 +12,22 @@ memcached
 
 ```
 npm install
-node index.js "BUS ROUTE" "BUS STOP NAME" "DIRECTION"
+node nextbus.js "BUS ROUTE" "BUS STOP NAME" "DIRECTION"
 ```
-### Example
 ```
-node index.js "Brklyn Center - Fremont - 26th" "Brooklyn Center Transit" NORTHBOUND
+node getdiskusage.js "dir path"
+```
+### Examples
+```
+node nextbus.js "Brklyn Center - Fremont - 26th" "Brooklyn Center Transit" NORTHBOUND
 > 18 Min
 ```
-
+```
+node getdiskusage.js /tmp
+> [{"/tmp/foo", 1000}, 
+   {"/tmp/bar", 1000000},
+   {"/tmp/buzzz", 42}]
+```
 ## Authors
 
 * **Akash Kumar** - *Initial work* - (https://github.com/akashkumar25274)
