@@ -81,7 +81,11 @@ if (cmdArg.length !== 3) {
                 return Promise.reject("Transit not available")
             }
         }).then((data) => {
-            console.log(data[0].DepartureText);
+            if(data.length > 0){
+                console.log(data[0].DepartureText);
+            }else {
+                console.log("Buses not available");
+            }
         }).catch(err => {
             console.error(err);
         })
